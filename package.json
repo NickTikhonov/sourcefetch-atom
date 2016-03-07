@@ -1,14 +1,14 @@
 {
   "name": "sourcefetch",
   "main": "./lib/sourcefetch",
-  "version": "0.0.0",
-  "description": "A short description of your package",
+  "version": "0.0.1",
+  "description": "I'm feeling lucky for StackOverflow",
   "keywords": [
   ],
   "activationCommands": {
     "atom-workspace": "sourcefetch:fetch"
   },
-  "repository": "https://github.com/atom/sourcefetch",
+  "repository": "https://github.com/nicktikhonov/sourcefetch-atom",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
