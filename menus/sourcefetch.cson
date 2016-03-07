@@ -1,8 +1,7 @@
-# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Fetch Selected'
+      'label': 'SourceFetch selection'
       'command': 'sourcefetch:fetch'
     }
   ]
@@ -10,10 +9,10 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'sourcefetch'
+      'label': 'SourceFetch'
       'submenu': [
         {
-          'label': 'Fetch Selected'
+          'label': 'SourceFetch Selection'
           'command': 'sourcefetch:fetch'
         }
       ]
