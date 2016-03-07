@@ -1,0 +1,22 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Toggle sourcefetch'
+      'command': 'sourcefetch:toggle'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'sourcefetch'
+      'submenu': [
+        {
+          'label': 'Toggle'
+          'command': 'sourcefetch:toggle'
+        }
+      ]
+    ]
+  }
+]
