@@ -2,8 +2,8 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Toggle sourcefetch'
-      'command': 'sourcefetch:toggle'
+      'label': 'Fetch Selected'
+      'command': 'sourcefetch:fetch'
     }
   ]
 'menu': [
@@ -13,8 +13,8 @@
       'label': 'sourcefetch'
       'submenu': [
         {
-          'label': 'Toggle'
-          'command': 'sourcefetch:toggle'
+          'label': 'Fetch Selected'
+          'command': 'sourcefetch:fetch'
         }
       ]
     ]

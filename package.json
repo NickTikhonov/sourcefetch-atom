@@ -6,7 +6,7 @@
   "keywords": [
   ],
   "activationCommands": {
-    "atom-workspace": "sourcefetch:toggle"
+    "atom-workspace": "sourcefetch:fetch"
   },
   "repository": "https://github.com/atom/sourcefetch",
   "license": "MIT",
