@@ -1,6 +1,6 @@
 # SourceFetch
 
-![Alt text](/screenshots/sourcefetch.gif)
+<img src="/screenshots/sourcefetch.gif" alt="SourceFetch" width="500"/>
 
 "I'm feeling lucky" button for StackOverflow. Converts problem definitions, e.g.
 "factorial function" into working source code, taking into consideration the
