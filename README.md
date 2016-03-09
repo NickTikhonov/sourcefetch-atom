@@ -1,10 +1,9 @@
-# SourceFetch
+# Sourcerer
 
-<img src="/screenshots/sourcefetch.gif" alt="SourceFetch" width="500"/>
+<img src="/screenshots/sourcerer.gif" alt="SourceFetch" width="500"/>
 
-"I'm feeling lucky" button for StackOverflow. Converts problem definitions, e.g.
-"factorial function" into working source code, taking into consideration the
-language used in the editor instance.
+StackOverflow "I'm feeling lucky" button for the Atom text editor. Turns problem
+descriptions into source code by searching StackOverflow accepted answers.
 
 ## Usage
 

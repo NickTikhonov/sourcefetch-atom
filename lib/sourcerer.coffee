@@ -64,7 +64,7 @@ module.exports =
   activate: ->
     @subscriptions = new CompositeDisposable
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'sourcefetch:fetch': => @fetch()
+      'sourcerer:fetch': => @fetch()
 
   deactivate: ->
     @subscriptions.dispose()

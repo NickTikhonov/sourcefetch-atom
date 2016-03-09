@@ -1,14 +1,14 @@
 {
-  "name": "sourcefetch",
-  "main": "./lib/sourcefetch",
+  "name": "sourcerer",
+  "main": "./lib/sourcerer",
   "version": "0.0.1",
   "description": "I'm feeling lucky for StackOverflow",
   "keywords": [
   ],
   "activationCommands": {
-    "atom-workspace": "sourcefetch:fetch"
+    "atom-workspace": "sourcerer:fetch"
   },
-  "repository": "https://github.com/nicktikhonov/sourcefetch-atom",
+  "repository": "https://github.com/nicktikhonov/sourcerer",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
