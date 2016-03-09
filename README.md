@@ -9,5 +9,5 @@ language used in the editor instance.
 ## Usage
 
 * Highlight a problem description
-* Hit __alt-m__
+* Hit __alt-s__
 * Enjoy the magic!
