@@ -1,4 +1,7 @@
 {CompositeDisposable} = require 'atom'
+google = require 'google'
+request = require 'request'
+cheerio = require 'cheerio'
 
 # Returns the code from the first accepted SO answer
 # from the provided URLs to SO pages.
@@ -24,10 +27,8 @@ findSnippet = (soLinks) ->
 # a StackOverflow page
 scrapeStackOverflow = (soLink) ->
   return new Promise (resolve, reject) ->
-    request = require 'request'
     request soLink, (error, response, body) ->
       if !error && response.statusCode == 200
-        cheerio = require 'cheerio'
         $ = cheerio.load body
         snippet = $('div.accepted-answer pre code').text()
         if snippet == ""
@@ -42,7 +43,6 @@ scrapeStackOverflow = (soLink) ->
 # for the given query and language
 searchGoogle = (query, language) ->
   return new Promise (resolve, reject) ->
-    google = require "google"
     google.resultsPerPage = 10
 
     searchString = "#{query} in #{language} site:stackoverflow.com"
@@ -87,6 +87,6 @@ module.exports =
           atom.notifications.addSuccess "Got snippet!"
           editor.insertText(snippet)
         , (err) ->
-          atom.notifications.addError "FindSnippet error: " + JSON.stringify(err)
+          atom.notifications.addError err.reason
       , (err) ->
-        atom.notifications.addError "SearchGoogle error: " + JSON.stringify(err)
+        atom.notifications.addError err.reason
