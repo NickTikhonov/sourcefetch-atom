@@ -7,4 +7,7 @@
 language used in the editor instance.
 
 ## Usage
-Highlight a problem 
+
+* Highlight a problem description
+* Hit __alt-m__
+* Enjoy the magic!
