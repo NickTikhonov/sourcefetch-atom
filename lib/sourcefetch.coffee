@@ -1,33 +1,62 @@
 {CompositeDisposable} = require 'atom'
 
-getSnippet = (soLink) ->
+# Returns the code from the first accepted SO answer
+# from the provided URLs to SO pages.
+findSnippet = (soLinks) ->
+  return new Promise (resolve, reject) ->
+    if soLinks.length == 0
+      reject reason: "No results found for this query."
+
+    findSnippetRecursive = ->
+      currentLink = soLinks.shift()
+      console.log currentLink
+      scrapeStackOverflow(currentLink).then (result) ->
+        resolve result
+      , (err) ->
+        if soLinks.length == 0
+          reject reason: "No accepted answers on StackOverflow"
+        else
+          findSnippetRecursive()
+
+    findSnippetRecursive()
+
+# Extracts the accepted answer code from
+# a StackOverflow page
+scrapeStackOverflow = (soLink) ->
   return new Promise (resolve, reject) ->
     request = require 'request'
     request soLink, (error, response, body) ->
       if !error && response.statusCode == 200
         cheerio = require 'cheerio'
         $ = cheerio.load body
-        resolve $('div.accepted-answer code').text()
+        snippet = $('div.accepted-answer pre code').text()
+        if snippet == ""
+          reject reason: 'No accepted answer / no code in accepted answer'
+        else
+          resolve snippet
       else
-        console.log error
         reject reason: 'Problem scraping StackOverflow'
 
+
+# Returns a list of StackOverlow links
+# for the given query and language
 searchGoogle = (query, language) ->
   return new Promise (resolve, reject) ->
     google = require "google"
-    google.resultsPerPage = 1
+    google.resultsPerPage = 10
 
     searchString = "#{query} in #{language} site:stackoverflow.com"
+    console.log "SEARCHING: #{searchString}"
     google searchString, (err, next, links) ->
       if err
         reject reason: "An error has occured"
 
       if links.length == 0
-        console.log "No results"
         reject reason: "No results were found"
 
-      soLink = links[0].link
-      resolve soLink
+      soLinks = links.map (item) -> item.link
+      resolve soLinks
+
 
 module.exports =
   subscriptions: null
@@ -51,13 +80,13 @@ module.exports =
       language = editor.getGrammar().name
 
       searchGoogle(selection, language)
-      .then (soLink) ->
+      .then (soLinks) ->
         atom.notifications.addSuccess "Googled problem."
-        getSnippet(soLink)
+        findSnippet(soLinks)
         .then (snippet) ->
           atom.notifications.addSuccess "Got snippet!"
           editor.insertText(snippet)
         , (err) ->
-          atom.notifications.addError err.reason
+          atom.notifications.addError "FindSnippet error: " + JSON.stringify(err)
       , (err) ->
-        atom.notifications.addError err.reason
+        atom.notifications.addError "SearchGoogle error: " + JSON.stringify(err)
