@@ -14,7 +14,7 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "google": "*",
+    "google": ">2.0.0",
     "cheerio": "*",
     "request": "*"
   }
