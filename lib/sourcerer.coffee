@@ -47,14 +47,14 @@ searchGoogle = (query, language) ->
 
     searchString = "#{query} in #{language} site:stackoverflow.com"
     console.log "SEARCHING: #{searchString}"
-    google searchString, (err, next, links) ->
+    google searchString, (err, res) ->
       if err
         reject reason: "An error has occured"
 
-      if links.length == 0
+      if res.links.length == 0
         reject reason: "No results were found"
 
-      soLinks = links.map (item) -> item.link
+      soLinks = res.links.map (item) -> item.link
       resolve soLinks
 
 
@@ -65,6 +65,7 @@ module.exports =
     @subscriptions = new CompositeDisposable
     @subscriptions.add atom.commands.add 'atom-workspace',
       'sourcerer:fetch': => @fetch()
+
 
   deactivate: ->
     @subscriptions.dispose()
