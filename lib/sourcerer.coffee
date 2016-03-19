@@ -80,9 +80,6 @@ module.exports =
 
       language = editor.getGrammar().name
 
-      google "test", (err,next,link) ->
-        console.log err,next,link
-
       searchGoogle(selection, language)
       .then (soLinks) ->
         atom.notifications.addSuccess "Googled problem."
