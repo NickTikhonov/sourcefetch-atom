@@ -31,8 +31,20 @@ scrapeStackOverflow = (soLink) ->
       if !error && response.statusCode == 200
         $ = cheerio.load body
         snippet = $('div.accepted-answer pre code').text()
+        console.log snippet
         if snippet == ""
-          reject reason: 'No accepted answer / no code in accepted answer'
+          votes = $('span.vote-count-post').first().text()
+          snippet = $('div.answer pre code').first().text()
+          console.log votes
+          console.log snippet
+          if parseInt( votes, 10 ) < 0
+            reject reason: "Badly voted answer, not a good idea"
+          else
+            atom.notifications.addWarning("This was not a top voted answer, but
+            the best we could get with #{votes} votes")
+            resolve snippet
+          if snippet == ""
+            reject reason: 'No accepted answer / no code in accepted answer'
         else
           resolve snippet
       else
