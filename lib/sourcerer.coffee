@@ -39,7 +39,6 @@ scrapeStackOverflow = (soLink) ->
           console.log snippet
           if parseInt( votes, 10 ) < 0
             reject reason: "Badly voted answer, not a good idea"
-
           else
             atom.notifications.addWarning("This was not a top voted answer, but
             the best we could get with #{votes} votes")
