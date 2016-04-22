@@ -3,8 +3,7 @@
   "main": "./lib/sourcerer",
   "version": "0.0.1",
   "description": "I'm feeling lucky for StackOverflow",
-  "keywords": [
-  ],
+  "keywords": [],
   "activationCommands": {
     "atom-workspace": "sourcerer:fetch"
   },
@@ -14,8 +13,9 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
+    "atom-space-pen-views": "^2.0.3",
+    "cheerio": "^0.20.0",
     "google": ">=2.0.0",
-    "cheerio": "*",
-    "request": "*"
+    "request": "^2.72.0"
   }
 }
