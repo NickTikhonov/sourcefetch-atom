@@ -10,7 +10,7 @@ class Scraper
     return new Promise (resolve, reject) ->
       request soLink, (error, response, body) ->
         if not error and response.statusCode is 200
-          snippet = self.scrape body
+          snippet = self.scrapeHTML body
           if snippet == []
             reject "No top answer"
           else
@@ -52,7 +52,7 @@ class Scraper
         }
 
     return {
-      answers: answerSections
+      sections: answerSections
       author: $('.user-details a').text().trim()
       votes: parseInt $('.vote-count-post').text(), 10
       accepted: $('span.vote-accepted-on').length == 1

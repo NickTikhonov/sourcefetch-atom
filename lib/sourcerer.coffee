@@ -19,9 +19,9 @@ findSnippets = (soLinks) ->
 
       currentLink = soLinks.shift()
       console.log currentLink
-      scraper.scrapeStackOverflow(currentLink).then (result) ->
-        results.push result
-        if results.length == 3
+      scraper.scrapeURL(currentLink).then (result) ->
+        results = results.concat filterAnswers(result.answers)
+        if results.length >= 5
           resolve results
         else
           findSnippetsRecursive()
@@ -29,6 +29,10 @@ findSnippets = (soLinks) ->
         findSnippetsRecursive()
 
     findSnippetsRecursive()
+
+filterAnswers = (answers) ->
+  answers.filter (answer) ->
+    answer.accepted || answer.votes > 50
 
 module.exports =
   subscriptions: null
@@ -56,6 +60,8 @@ module.exports =
           new ResultView(editor, snippets)
           # editor.insertText(snippet)
         , (err) ->
+          console.log err
           atom.notifications.addError err.reason
       , (err) ->
+        console.log err
         atom.notifications.addError err.reason

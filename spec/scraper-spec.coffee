@@ -5,7 +5,7 @@ path      = require 'path'
 describe "scrabing empty html", ->
   it "returns empty list when there are no answers", ->
     scraper = new Scraper()
-    expect(scraper.scrape('<html></html>').answers).toEqual([])
+    expect(scraper.scrapeHTML('<html></html>').answers).toEqual([])
 
 describe "scraping a page with one accepted answer", ->
   scraper = new Scraper()
@@ -22,10 +22,10 @@ describe "scraping a page with one accepted answer", ->
       testHtml
 
     runs ->
-      snippets = scraper.scrape(testHtml)
+      snippets = scraper.scrapeHTML(testHtml)
       snippet = snippets.answers[0]
-      expect(snippet.answers).toBeDefined()
-      expect(snippet.answers.length).toBe(3)
+      expect(snippet.sections).toBeDefined()
+      expect(snippet.sections.length).toBe(3)
 
   it "returns the correct metadata", ->
     testHtml = undefined
@@ -38,7 +38,7 @@ describe "scraping a page with one accepted answer", ->
       testHtml
 
     runs ->
-      snippets = scraper.scrape(testHtml)
+      snippets = scraper.scrapeHTML(testHtml)
       snippet = snippets.answers[0]
       expect(snippet.author).toBe("Yuriko")
       expect(snippet.votes).toBe(3)
@@ -55,5 +55,5 @@ describe "scraping a page with one accepted answer", ->
       testHtml
 
     runs ->
-      scraped = scraper.scrape(testHtml)
+      scraped = scraper.scrapeHTML(testHtml)
       expect(scraped.question).toBe("Error in compiling hello world in c")
