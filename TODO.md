@@ -2,8 +2,11 @@
 
 ## Core
 
-- [ ] Insertion of snippets with the context of the surrounding comments
-- [ ] Comment before snippet with the author name (automatic reference)
+- [X] Insertion of snippets with the context of the surrounding comments
+- [X] Comment before snippet with the author name (automatic reference)
+- [ ] Wrap long text
+- [ ] Set a maximum allowed time to ensure the interaction is reasonably fast
+- [ ] Add a spinner for API calls
 
 ## Customisation
 
