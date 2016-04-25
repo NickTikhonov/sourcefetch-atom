@@ -1,11 +1,5 @@
 {$$, SelectListView} = require 'atom-space-pen-views'
-
-insertComment = (editor, comment) ->
-  editor.insertText comment + "\n", select: true
-  selection = editor.getLastSelection()
-  selection.toggleLineComments()
-  selection.clear()
-
+{insertAnswer, insertComment} = require './editor-utils'
 
 class ResultView extends SelectListView
   # items is a list of string code snippets
@@ -33,14 +27,7 @@ class ResultView extends SelectListView
 
   confirmed: (item) ->
     @cancel()
-    insertComment @editor, "~ Snippet by StackOverflow user #{item.author} from an answer with #{item.votes} votes. ~"
-
-    for section in item.sections
-      if section.type == "code"
-        @editor.insertText "\n" + section.body + "\n"
-      else if section.type == "text"
-        insertComment @editor, section.body
-
+    insertAnswer @editor, item
 
   cancelled: ->
     console.log("CANCELLED")
