@@ -1,9 +1,9 @@
 {
-  "name": "sourcerer",
+  "name": "Sourcerer",
   "main": "./lib/sourcerer",
   "version": "0.0.1",
-  "description": "I'm feeling lucky for StackOverflow",
-  "keywords": [],
+  "description": "Find StackOverflow code snippets relevant to your problem with alt-s.",
+  "keywords": ["StackOverflow", "code", "snippets"],
   "activationCommands": {
     "atom-workspace": "sourcerer:fetch"
   },
