@@ -1,6 +1,7 @@
 # Sourcerer
 
 <img src="/screenshots/sourcerer.gif" alt="SourceFetch" width="500"/>
+![](/screenshots/sourcerer.gif)
 
 Find StackOverflow code snippets relevant to your problem with `alt-s`.
 
