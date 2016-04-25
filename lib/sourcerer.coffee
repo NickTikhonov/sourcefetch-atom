@@ -1,5 +1,5 @@
 {CompositeDisposable} = require 'atom'
-
+{insertAnswer} = require './editor-utils'
 SearchEngine  = require './search'
 Scraper = require './scraper'
 ResultView = require './results-view'
@@ -21,7 +21,7 @@ findSnippets = (soLinks) ->
       console.log currentLink
       scraper.scrapeURL(currentLink).then (result) ->
         results = results.concat filterAnswers(result.answers)
-        if results.length >= 5
+        if results.length >= atom.config.get('sourcerer.numSnippets')
           resolve results
         else
           findSnippetsRecursive()
@@ -32,7 +32,11 @@ findSnippets = (soLinks) ->
 
 filterAnswers = (answers) ->
   answers.filter (answer) ->
-    answer.accepted || answer.votes > 50
+    answer.accepted || answer.votes > atom.config.get('sourcerer.notAcceptedRequiredVotes')
+
+bestAnswer = (answers) ->
+  answers.reduce (p, v) ->
+    if p.votes > v.votes then p else v
 
 module.exports =
   subscriptions: null
@@ -80,7 +84,11 @@ module.exports =
     search.searchGoogle(selection, language).then (soLinks) ->
       atom.notifications.addSuccess "Googled problem."
       findSnippets(soLinks).then (snippets) ->
-        new ResultView(editor, snippets)
+        if atom.config.get('sourcerer.luckyMode')
+          best = bestAnswer snippets
+          insertAnswer editor, best
+        else
+          new ResultView(editor, snippets)
         # editor.insertText(snippet)
       , (err) ->
         console.log err
