@@ -1,5 +1,12 @@
 {$$, SelectListView} = require 'atom-space-pen-views'
 
+insertComment = (editor, comment) ->
+  editor.insertText comment + "\n", select: true
+  selection = editor.getLastSelection()
+  selection.toggleLineComments()
+  selection.clear()
+
+
 class ResultView extends SelectListView
   # items is a list of string code snippets
   initialize: (@editor, items) ->
@@ -26,14 +33,13 @@ class ResultView extends SelectListView
 
   confirmed: (item) ->
     @cancel()
+    insertComment @editor, "~ Snippet by StackOverflow user #{item.author} from an answer with #{item.votes} votes. ~"
+
     for section in item.sections
       if section.type == "code"
         @editor.insertText "\n" + section.body + "\n"
       else if section.type == "text"
-        @editor.insertText section.body + "\n", select: true
-        selection = @editor.getLastSelection()
-        selection.toggleLineComments()
-        selection.clear()
+        insertComment @editor, section.body
 
 
   cancelled: ->
