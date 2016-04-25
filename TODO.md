@@ -10,10 +10,10 @@
 
 ## Customisation
 
-- [ ] Optional display of the list view - toggling true "I'm feeling lucky" mode
-- [ ] Setting for the number of answers to be displayed for a query
-- [ ] Setting for non-accepted answer vote threshold
-- [ ] Choice to insert just the snippet and not the whole answer
+- [X] Optional display of the list view - toggling true "I'm feeling lucky" mode
+- [X] Setting for the number of answers to be displayed for a query
+- [X] Setting for non-accepted answer vote threshold
+- [X] Choice to insert just the snippet and not the whole answer
 
 ## Bugs
 
