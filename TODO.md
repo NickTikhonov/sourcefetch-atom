@@ -2,7 +2,7 @@
 
 ## Core
 
-- [ ] Insertion of snippets with the context of the surrounding answers
+- [ ] Insertion of snippets with the context of the surrounding comments
 - [ ] Comment before snippet with the author name (automatic reference)
 
 ## Customisation

@@ -25,9 +25,16 @@ class ResultView extends SelectListView
               @p section.body
 
   confirmed: (item) ->
-    console.log("CONFIRMED")
     @cancel()
-    @editor.insertText JSON.stringify(item, 2)
+    for section in item.sections
+      if section.type == "code"
+        @editor.insertText "\n" + section.body + "\n"
+      else if section.type == "text"
+        @editor.insertText section.body + "\n", select: true
+        selection = @editor.getLastSelection()
+        selection.toggleLineComments()
+        selection.clear()
+
 
   cancelled: ->
     console.log("CANCELLED")
