@@ -36,6 +36,29 @@ filterAnswers = (answers) ->
 
 module.exports =
   subscriptions: null
+  config:
+    notAcceptedRequiredVotes:
+      title: "Minimum Number of Votes"
+      description: "The number of votes needed by an unaccepted answer to appear in the results."
+      type: 'integer'
+      default: 50
+      minimum: 1
+    numSnippets:
+      title: "Minimum number of snippets"
+      description: "Number of snippets fetched by Sourcerer per query"
+      type: 'integer'
+      default: 3
+      minimum: 1
+    luckyMode:
+      title: "I'm feeling lucky"
+      description: "Do not show the preview window, automatically insert the best snippet found based on the number of votes"
+      type: 'boolean'
+      default: false
+    insertDescription:
+      title: "Insert accompanying text"
+      description: "Insert the accompanying StackOverflow answer text as well as the code"
+      type: 'boolean'
+      default: true
 
   activate: ->
     @subscriptions = new CompositeDisposable
@@ -46,22 +69,22 @@ module.exports =
     @subscriptions.dispose()
 
   fetch: ->
-    if editor = atom.workspace.getActiveTextEditor()
-      selection = editor.getSelectedText()
+    return unless editor = atom.workspace.getActiveTextEditor()
+    selection = editor.getSelectedText()
 
-      if selection.length == 0
-        atom.notifications.addWarning "Please make a valid selection"
-        return
+    if selection.length == 0
+      atom.notifications.addWarning "Please make a valid selection"
+      return
 
-      language = editor.getGrammar().name
-      search.searchGoogle(selection, language).then (soLinks) ->
-        atom.notifications.addSuccess "Googled problem."
-        findSnippets(soLinks).then (snippets) ->
-          new ResultView(editor, snippets)
-          # editor.insertText(snippet)
-        , (err) ->
-          console.log err
-          atom.notifications.addError err.reason
+    language = editor.getGrammar().name
+    search.searchGoogle(selection, language).then (soLinks) ->
+      atom.notifications.addSuccess "Googled problem."
+      findSnippets(soLinks).then (snippets) ->
+        new ResultView(editor, snippets)
+        # editor.insertText(snippet)
       , (err) ->
         console.log err
         atom.notifications.addError err.reason
+    , (err) ->
+      console.log err
+      atom.notifications.addError err.reason
