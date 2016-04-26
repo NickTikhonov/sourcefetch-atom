@@ -1,5 +1,5 @@
 {
-  "name": "Sourcerer",
+  "name": "sourcerer",
   "main": "./lib/sourcerer",
   "version": "1.2.0",
   "description": "Find StackOverflow code snippets relevant to your problem with alt-s.",
