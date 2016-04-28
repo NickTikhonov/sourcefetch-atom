@@ -1,7 +1,7 @@
 Sourcerer
 =========================
 
-Quickly find and insert StackOverflow Code Snippets
+Atom plugin for quickly finding and using StackOverflow code snippets. 
 
 ![](/screenshots/sourcerer.gif)
 
