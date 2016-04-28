@@ -9,6 +9,7 @@ Find and use code snippets relevant to your problem. Replace routine StackOverfl
 
 ## Usage
 
+* [Install Sourcerer](https://atom.io/packages/Sourcerer)
 * Write and select a problem description, e.g. 'fizzbuzz implementation' or 'quicksort'
 * Hit __alt-s__
 * View and insert relevant StackOverflow code snippets!
