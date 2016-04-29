@@ -38,6 +38,11 @@ bestAnswer = (answers) ->
   answers.reduce (p, v) ->
     if p.votes > v.votes then p else v
 
+displayErrorNotification = (err) ->
+  console.log err
+  atom.notifications.addError err.reason
+
+
 module.exports =
   subscriptions: null
   config:
@@ -74,25 +79,20 @@ module.exports =
 
   fetch: ->
     return unless editor = atom.workspace.getActiveTextEditor()
-    selection = editor.getSelectedText()
 
-    if selection.length == 0
+    language = editor.getGrammar().name
+    query = editor.getSelectedText()
+    if query.length == 0
       atom.notifications.addWarning "Please make a valid selection"
       return
 
-    language = editor.getGrammar().name
-    search.searchGoogle(selection, language).then (soLinks) ->
+    search.searchGoogle(query, language)
+    .then (soLinks) ->
       atom.notifications.addSuccess "Googled problem."
-      findSnippets(soLinks).then (snippets) ->
-        if atom.config.get('sourcerer.luckyMode')
-          best = bestAnswer snippets
-          insertAnswer editor, best
-        else
-          new ResultView(editor, snippets)
-        # editor.insertText(snippet)
-      , (err) ->
-        console.log err
-        atom.notifications.addError err.reason
-    , (err) ->
-      console.log err
-      atom.notifications.addError err.reason
+      return findSnippets(soLinks)
+    .then (snippets) ->
+      if atom.config.get('sourcerer.luckyMode')
+        insertAnswer editor, bestAnswer snippets
+      else
+        new ResultView(editor, snippets)
+    .catch displayErrorNotification

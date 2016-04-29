@@ -12,11 +12,10 @@ class Search
       searchQuery = self.buildSearchString(query, language)
       google searchQuery, (err, res) ->
         if err
-          reject reason: "An error has occured"
-
-        if res.links.length == 0
+          reject reason: "Google Error - are you online?"
+        else if res.links.length == 0
           reject reason: "No results were found"
-
-        resolve res.links.map (item) -> item.link
+        else
+          resolve res.links.map (item) -> item.link
 
 module.exports = Search
