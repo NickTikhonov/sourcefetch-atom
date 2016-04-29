@@ -2,24 +2,17 @@ cheerio = require 'cheerio'
 request = require 'request'
 
 class Scraper
-
-  # Downloads URL to SO page
-  # and calls scrapeHTML to scrape it
   scrapeURL: (soLink) ->
     self = this
     return new Promise (resolve, reject) ->
       request soLink, (error, response, body) ->
         if not error and response.statusCode is 200
-          snippet = self.scrapeHTML body
-          if snippet == []
-            reject "No top answer"
-          else
-            resolve snippet
+          pageInfo = self.scrapeHTML body
+          resolve pageInfo
         else
           reject reason: 'Problem scraping StackOverflow'
 
-  # Scrapes the HTML (as a string)
-  # and produces a list of snippets
+
   scrapeHTML: (body) ->
     $ = cheerio.load body
     answers = []
@@ -34,8 +27,7 @@ class Scraper
     }
 
   # Extracts information about a single
-  # answer from the HTML element "div.answer"
-  # that contains it.
+  # answer from the "div.answer" HTML element.
   scrapeAnswer: (elem) ->
     answerSections = []
     $ = cheerio.load elem
