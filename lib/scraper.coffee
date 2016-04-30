@@ -1,6 +1,27 @@
 cheerio = require 'cheerio'
 request = require 'request'
 
+###
+The Scraper class is responsible for downloading and extracting information
+from StackOverflow pages. "scrapeURL" serves as the encompassing function
+which produces a data object given a url. The object follows this structure:
+
+{
+  question: "<question string>"
+  answers: [
+    {
+      author: "<author username>",
+      votes: <number of votes>,
+      accepted: <true|false>,
+      sections: [{
+        type: "<code|text>",
+        body: "<string contents of the section>"
+      }]
+    }
+  ]
+}
+###
+
 class Scraper
   scrapeURL: (soLink) ->
     self = this
