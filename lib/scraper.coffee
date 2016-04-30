@@ -1,25 +1,39 @@
 cheerio = require 'cheerio'
 request = require 'request'
 
-class Scraper
+###
+The Scraper class is responsible for downloading and extracting information
+from StackOverflow pages. "scrapeURL" serves as the encompassing function
+which produces a data object given a url. The object follows this structure:
 
-  # Downloads URL to SO page
-  # and calls scrapeHTML to scrape it
+{
+  question: "<question string>"
+  answers: [
+    {
+      author: "<author username>",
+      votes: <number of votes>,
+      accepted: <true|false>,
+      sections: [{
+        type: "<code|text>",
+        body: "<string contents of the section>"
+      }]
+    }
+  ]
+}
+###
+
+class Scraper
   scrapeURL: (soLink) ->
     self = this
     return new Promise (resolve, reject) ->
       request soLink, (error, response, body) ->
         if not error and response.statusCode is 200
-          snippet = self.scrapeHTML body
-          if snippet == []
-            reject "No top answer"
-          else
-            resolve snippet
+          pageInfo = self.scrapeHTML body
+          resolve pageInfo
         else
           reject reason: 'Problem scraping StackOverflow'
 
-  # Scrapes the HTML (as a string)
-  # and produces a list of snippets
+
   scrapeHTML: (body) ->
     $ = cheerio.load body
     answers = []
@@ -34,8 +48,7 @@ class Scraper
     }
 
   # Extracts information about a single
-  # answer from the HTML element "div.answer"
-  # that contains it.
+  # answer from the "div.answer" HTML element.
   scrapeAnswer: (elem) ->
     answerSections = []
     $ = cheerio.load elem
