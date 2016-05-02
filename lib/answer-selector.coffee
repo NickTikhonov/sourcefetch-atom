@@ -18,13 +18,16 @@ class AnswerSelector
           self.scraper.scrape(currentLink).then (newAnswers) ->
             foundAnswers = foundAnswers.concat self.__filter(newAnswers, minVotes)
             if foundAnswers.length >= numAnswers
-              resolve foundAnswers
+              resolve self.__sort(foundAnswers)
             else
               findAnswersRecursive()
           .catch (err) ->
             findAnswersRecursive()
 
       findAnswersRecursive()
+
+  __sort: (answers) ->
+    answers.sort (a, b) -> b.votes - a.votes
 
   __filter: (answers, minVotes) ->
     answers.filter (answer) -> answer.accepted or answer.votes > minVotes

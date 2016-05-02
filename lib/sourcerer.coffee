@@ -64,7 +64,7 @@ module.exports =
         minVotes: atom.config.get('sourcerer.minVotes')
     .then (answers) ->
       if atom.config.get('sourcerer.luckyMode')
-        best = bestAnswer answers
+        best = answers[0]
         best.insertWith editor,
           insertDescription: atom.config.get('sourcerer.insertDescription'),
           credit: true
@@ -73,10 +73,6 @@ module.exports =
     .catch displayErrorNotification
 
 # -- end of module.exports --
-
-bestAnswer = (answers) ->
-  answers.reduce (p, v) ->
-    if p.votes > v.votes then p else v
 
 displayErrorNotification = (err) ->
   atom.notifications.addError err.reason

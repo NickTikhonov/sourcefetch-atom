@@ -16,7 +16,7 @@ class ResultView extends SelectListView
   viewForItem: (item) ->
     $$ ->
       @li class: 'two-lines', =>
-        @div "StackOverflow Snippet", class: 'primary-line'
+        @div "#{item.author} | #{item.votes} vote#{if item.votes is 1 then '' else 's'}", class: 'primary-line'
         @div class: 'secondary-line', =>
           for section in item.sections
             if section.type == "code"
