@@ -4,7 +4,7 @@ request = require 'request'
 ###
 The Scraper class is responsible for downloading and extracting information
 from StackOverflow pages. "scrapeURL" serves as the encompassing function
-which produces a data object given a url. The object follows this structure:
+which produces a data object given a url. T
 
 {
   question: "<question string>"
