@@ -3,17 +3,15 @@ class Answer
 
   hasCode: -> (@sections.filter (section) -> section.isCode()).length > 0
 
-  insertWith: (editor, options) ->
-    # Inserts self into editor.
-    # options:
-    #   comments: whether to insert accompanying answer text
-    #   credit: whether to insert a credit comment
-    @__insertComment editor, "~ Snippet by StackOverflow user #{@author} from an answer with #{@votes} votes. ~"
+  insertWith: (editor, {insertDescription, credit}) ->
+    if insertDescription
+      @__insertComment editor, "~ Snippet by StackOverflow user #{@author} from an answer with #{@votes} votes. ~"
+
     for section in @sections
-      if section.isCode
+      if section.isCode()
         editor.insertText "\n" + section.body + "\n"
-      else if section.isText
-        if options.comments
+      else if section.isText()
+        if insertDescription
           @__insertComment editor, section.body
 
   __insertComment: (editor, comment) ->
