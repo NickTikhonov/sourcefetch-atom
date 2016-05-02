@@ -1,59 +1,36 @@
-Scraper   = require '../lib/scraper'
-fs        = require 'fs'
-path      = require 'path'
+Scraper = require '../lib/scraper'
+PageLoader = require '../lib/page-loader'
+fs = require 'fs'
+path = require 'path'
 
-describe "scrabing empty html", ->
-  it "returns empty list when there are no answers", ->
-    scraper = new Scraper()
-    expect(scraper.scrapeHTML('<html></html>').answers).toEqual([])
+describe "Scraper", ->
+  it "can first no answers", ->
+    waitsForPromise ->
+      mockLoader =
+        get: (url) ->
+          return new Promise (resolve, reject) ->
+            resolve "<html></html>"
 
-describe "scraping a page with one accepted answer", ->
-  scraper = new Scraper()
-  testHtml = undefined
+      scraper = new Scraper(mockLoader)
+      scraper.scrape('someurl').then (answers) ->
+        expect(answers).toEqual([])
 
-  it "returns the 3 parts of the answer", ->
-    testHtml = undefined
-    scraper = new Scraper()
+  it "can find one answer", ->
+    waitsForPromise ->
+      mockLoader =
+        get: (url) ->
+          return new Promise (resolve, reject) ->
+            fs.readFile path.resolve(__dirname, 'so-one-accepted.html'), (err, body) ->
+              resolve body
 
-    fs.readFile path.resolve(__dirname, 'so-one-accepted.html'), (err, body) ->
-      testHtml = body
+      new Scraper(mockLoader).scrape('someurl').then (answers) ->
+        expect(answers.length).toBe(1)
 
-    waitsFor ->
-      testHtml
-
-    runs ->
-      snippets = scraper.scrapeHTML(testHtml)
-      snippet = snippets.answers[0]
-      expect(snippet.sections).toBeDefined()
-      expect(snippet.sections.length).toBe(3)
-
-  it "returns the correct metadata", ->
-    testHtml = undefined
-    scraper = new Scraper()
-
-    fs.readFile path.resolve(__dirname, 'so-one-accepted.html'), (err, body) ->
-      testHtml = body
-
-    waitsFor ->
-      testHtml
-
-    runs ->
-      snippets = scraper.scrapeHTML(testHtml)
-      snippet = snippets.answers[0]
-      expect(snippet.author).toBe("Yuriko")
-      expect(snippet.votes).toBe(3)
-      expect(snippet.accepted).toBe(true)
-
-  it "returns the correct question text", ->
-    testHtml = undefined
-    scraper = new Scraper()
-
-    fs.readFile path.resolve(__dirname, 'so-one-accepted.html'), (err, body) ->
-      testHtml = body
-
-    waitsFor ->
-      testHtml
-
-    runs ->
-      scraped = scraper.scrapeHTML(testHtml)
-      expect(scraped.question).toBe("Error in compiling hello world in c")
+        first = answers[0]
+        expect(first.author).toBe("Yuriko")
+        expect(first.votes).toBe(3)
+        expect(first.accepted).toBe(true)
+        expect(first.sections.length).toBe(3)
+        expect(first.sections[0].isText()).toBe(true)
+        expect(first.sections[1].isCode()).toBe(true)
+        expect(first.sections[2].isText()).toBe(true)
