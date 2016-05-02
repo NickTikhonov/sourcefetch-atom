@@ -1,5 +1,4 @@
 {$$, SelectListView} = require 'atom-space-pen-views'
-{insertAnswer, insertComment} = require './editor-utils'
 
 class ResultView extends SelectListView
   # items is a list of string code snippets
@@ -17,7 +16,7 @@ class ResultView extends SelectListView
   viewForItem: (item) ->
     $$ ->
       @li class: 'two-lines', =>
-        @div "StackOverflow Snippet", class: 'primary-line'
+        @div "#{item.author} | #{item.votes} vote#{if item.votes is 1 then '' else 's'}", class: 'primary-line'
         @div class: 'secondary-line', =>
           for section in item.sections
             if section.type == "code"
@@ -25,9 +24,11 @@ class ResultView extends SelectListView
             else if section.type == "text"
               @p section.body
 
-  confirmed: (item) ->
+  confirmed: (selectedAnswer) ->
     @cancel()
-    insertAnswer @editor, item
+    selectedAnswer.insertWith @editor,
+      insertDescription: atom.config.get('sourcerer.insertDescription'),
+      credit: true
 
   cancelled: ->
     console.log("CANCELLED")

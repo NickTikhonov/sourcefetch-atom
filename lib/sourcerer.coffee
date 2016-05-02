@@ -1,23 +1,27 @@
 {CompositeDisposable} = require 'atom'
-{insertAnswer} = require './editor-utils'
+
 SearchEngine  = require './search'
+PageLoader = require './page-loader'
 Scraper = require './scraper'
+AnswerSelector = require './answer-selector'
 ResultView = require './results-view'
 
 search = new SearchEngine()
-scraper = new Scraper()
+loader = new PageLoader()
+scraper = new Scraper(loader)
+selector = new AnswerSelector(scraper)
 
 module.exports =
   subscriptions: null
 
   config:
-    notAcceptedRequiredVotes:
+    minVotes:
       title: "Minimum Number of Votes"
       description: "The number of votes needed by an unaccepted answer to appear in the results."
       type: 'integer'
       default: 50
       minimum: 1
-    numSnippets:
+    numAnswers:
       title: "Minimum number of snippets"
       description: "Number of snippets fetched by Sourcerer per query"
       type: 'integer'
@@ -54,48 +58,21 @@ module.exports =
     search.searchGoogle query, language
     .then (soLinks) ->
       atom.notifications.addSuccess "Googled problem."
-      return findAnswers(soLinks)
+      console.log selector
+      return selector.find soLinks,
+        numAnswers: atom.config.get('sourcerer.numAnswers')
+        minVotes: atom.config.get('sourcerer.minVotes')
     .then (answers) ->
       if atom.config.get('sourcerer.luckyMode')
-        insertAnswer editor, bestAnswer answers
+        best = answers[0]
+        best.insertWith editor,
+          insertDescription: atom.config.get('sourcerer.insertDescription'),
+          credit: true
       else
         new ResultView(editor, answers)
     .catch displayErrorNotification
 
 # -- end of module.exports --
-
-# Returns a list of answers from the provided StackOverflow URLs
-findAnswers = (soLinks) ->
-  return new Promise (resolve, reject) ->
-    answersWanted = atom.config.get('sourcerer.numSnippets')
-    results = []
-
-    findAnswersRecursive = ->
-      if soLinks.length is 0
-        if results.length is 0
-          reject reason: "Couldn't find any relevant answers"
-        else
-          resolve results
-      else
-        currentLink = soLinks.shift()
-        scraper.scrapeURL(currentLink).then (result) ->
-          results = results.concat filterAnswers(result.answers)
-          if results.length >= answersWanted
-            resolve results
-          else
-            findAnswersRecursive()
-        , (err) ->
-          findAnswersRecursive()
-
-    findAnswersRecursive()
-
-filterAnswers = (answers) ->
-  answers.filter (answer) ->
-    answer.accepted || answer.votes > atom.config.get('sourcerer.notAcceptedRequiredVotes')
-
-bestAnswer = (answers) ->
-  answers.reduce (p, v) ->
-    if p.votes > v.votes then p else v
 
 displayErrorNotification = (err) ->
   atom.notifications.addError err.reason
