@@ -3,7 +3,7 @@ Sourcerer
 
 Atom plugin for quickly finding and using StackOverflow code snippets. 
 
-![](https://raw.githubusercontent.com/NickTikhonov/sourcerer/master/screenshots/sourcerer.gif)
+![](/screenshots/sourcerer.gif)
 
 Find and use code snippets relevant to your problem. Replace routine StackOverflow searching with a simple interface for searching and browsing the largest code snippet collection on the internet :)
 
